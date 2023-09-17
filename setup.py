@@ -13,10 +13,12 @@ if __name__ == "__main__":
         author="Jaime Gonzalez Gomez",
         author_email="jim.gomez.dnn@gmail.com",
         version="0.0.0",
-        python_requires=">=3.8",
+        python_requires=">=3.9",
         description="",
         long_description=long_description,
         long_description_content_type="text/markdown",
         packages=setuptools.find_packages(),
-        install_requires=[],
+        install_requires=[
+            "numpy>=1.20",
+        ],
     )
