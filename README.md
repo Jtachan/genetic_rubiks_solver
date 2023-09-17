@@ -1,4 +1,4 @@
-![tests_badge](https://github.com/Jtachan/{REPO}/actions/workflows/unittests.yml/badge.svg)
+![tests_badge](https://github.com/Jtachan/genetic_rubiks_solver/actions/workflows/unittests.yml/badge.svg)
 
 # Rubik's Cube Solver
 
@@ -8,6 +8,11 @@ This project displays a Rubik's cube solver created with genetic algorithms.
 
 Documentation will be added once the project advances.
 Feel free to look for the latest updates within the 'develop' branch.
+
+You can find the documentation:
+
+- Within the [`/docs`](docs/index.md) folder
+- At the mkdocs generated page(https://jtachan.github.io/genetic_rubiks_solver/) (extended documentation)
 
 ## 🐍 Python Setup
 
