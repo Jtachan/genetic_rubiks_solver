@@ -1,17 +1,13 @@
-![tests_badge] (https://github.com/Jtachan/{REPO}/actions/workflows/unittests.yml/badge.svg)
-![docs_badge] (https://github.com/Jtachan/{REPO}/actions/workflows/docs.yml/badge.svg)
-![release_badge] (https://github.com/Jtachan/{REPO}/actions/workflows/release.yml/badge.svg)
+![tests_badge](https://github.com/Jtachan/{REPO}/actions/workflows/unittests.yml/badge.svg)
 
-# Python Repo Template
+# Rubik's Cube Solver
 
-Fill up with a repo description
+This project displays a Rubik's cube solver created with genetic algorithms.
 
 ## 📖 Documentation
 
-You can find the documentation:
-
-- Within the [`/docs`](docs/index.md) folder
-- At the [mkdocs generated page](https://jtachan.github.io/enigma_cipher/) (official documentation)
+Documentation will be added once the project advances.
+Feel free to look for the latest updates within the 'develop' branch.
 
 ## 🐍 Python Setup
 
@@ -21,13 +17,15 @@ You can find the documentation:
 
 **Installation**
 
-The package is installable via pip:
-````commandline
-pip install pkg
+The package is not released in PyPI. Thus, there are multiple options to run the code:
+
+1. Install via pip + git
+````shell
+pip install git+https://github.com/Jtachan/genetic_rubiks_solver.git
 ````
 
-The 'develop' branch can also be installed to work with unreleased features:
-````commandline
-pip install git+https://github.com/Jtachan/{REPO}.git@develop
-````
-
+2. Clone the repo, then install locally
+```shell
+git clone https://github.com/Jtachan/genetic_rubiks_solver.git
+pip install .
+```
