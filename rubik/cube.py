@@ -242,11 +242,4 @@ class RubiksCube:
 
     def is_solved(self) -> bool:
         """bool: Whether the cube is solved as in the original state"""
-        return np.all(
-            [
-                solved == face
-                for solved, face in zip(
-                    self.__solved_state.values(), self.faces.values()
-                )
-            ]
-        )
+        return np.all([np.all(face == face[0, 0]) for face in self.faces.values()])
