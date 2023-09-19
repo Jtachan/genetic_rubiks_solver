@@ -60,9 +60,7 @@ class RubiksCube:
              {self.faces[CubeFace.BOTTOM][2]}
             """
 
-    def rotate_face(
-        self, face: CubeFace, clockwise: bool = True, double_rot: bool = False
-    ):
+    def rotate_face(self, face: CubeFace, clockwise: bool, double_rot: bool = False):
         """
         Method to rotate a cube's face.
 
@@ -70,7 +68,7 @@ class RubiksCube:
         ----------
         face: CubeFace
             Cube's face to be rotated.
-        clockwise: bool, default = True
+        clockwise: bool
             If True, the rotation is performed clockwise. If False, the rotation
             is performed counter-clockwise.
         double_rot: bool, default = False
@@ -101,7 +99,7 @@ class RubiksCube:
                     CubeFace.BACK,
                     CubeFace.LEFT,
                 )
-            self.__x_axis_row_rotation(
+            self.__horizontal_row_rotation(
                 row_idx=0 if face is CubeFace.TOP else 2, face_order=face_order
             )
 
@@ -125,11 +123,11 @@ class RubiksCube:
                     CubeFace.BACK,
                     CubeFace.TOP,
                 )
-            self.__y_axis_parallel_rotation(
+            self.__vertical_perpendicular_rotation(
                 front_col_idx=2 if face is CubeFace.RIGHT else 0, face_order=face_order
             )
 
-        else:  # CubeFace is either FRONT or BACK
+        elif face in {CubeFace.FRONT, CubeFace.BACK}:
             if (
                 face is CubeFace.FRONT
                 and clockwise is True
@@ -149,18 +147,19 @@ class RubiksCube:
                     CubeFace.LEFT,
                     CubeFace.BOTTOM,
                 )
-            self.__y_axis_perpendicular_rotation(
+            self.__vertical_parallel_rotation(
                 right_col_idx=0 if face is CubeFace.FRONT else 2, face_order=face_order
             )
 
         if double_rot:
             self.rotate_face(face=face, clockwise=clockwise)
 
-    def __x_axis_row_rotation(self, row_idx: int, face_order: tuple):
+    def __horizontal_row_rotation(self, row_idx: int, face_order: tuple):
         """
-        Computes and updates the values of the tiles at one single X-axis row from
-        the cube. The only two faces that exist purely in this axis are the Top
-        and Bottom faces.
+        Computes and updates the tiles' values of a 1x3x3 cube contained in the
+        plane XY.
+        Being the rotation around the Z-axis, the only faces that are not updated
+        are the Top and Bottom faces.
 
         Parameters
         ----------
@@ -175,7 +174,7 @@ class RubiksCube:
         self.faces[face_order[2]][row_idx] = self.faces[face_order[1]][row_idx]
         self.faces[face_order[1]][row_idx] = backup_tiles
 
-    def __y_axis_parallel_rotation(self, front_col_idx: int, face_order: tuple):
+    def __vertical_perpendicular_rotation(self, front_col_idx: int, face_order: tuple):
         """
         Computes and updates the values of the tiles at one single Y-axis parallel
         column from the cube. The only two faces that exist purely in this axis are
@@ -210,11 +209,12 @@ class RubiksCube:
         ]
         self.faces[face_order[1]][:, col_idx[1]] = backup_tiles
 
-    def __y_axis_perpendicular_rotation(self, right_col_idx: int, face_order: tuple):
+    def __vertical_parallel_rotation(self, right_col_idx: int, face_order: tuple):
         """
-        Computes and updates the values of the tiles at one single Y-axis perpendicular
-        column from the cube. The only two faces that exist purely in this axis are
-        the Front and Back faces.
+        Computes and updates the tiles' values of a 1x3x3 cube contained in the
+        plane YZ.
+        Being the rotation around the X-axis, the only faces that are not updated
+        are the Front and Back faces.
 
         Parameters
         ----------
