@@ -23,14 +23,25 @@ class Color(enum.Enum):
 class CubeFace(enum.Enum):
     """
     Enumeration containing the six positional faces of the cube.
+    Each element has the value of its Rubik's cube face notation.
     """
 
-    BACK = enum.auto()
-    LEFT = enum.auto()
-    TOP = enum.auto()
-    RIGHT = enum.auto()
-    BOTTOM = enum.auto()
-    FRONT = enum.auto()
+    BACK = "B"
+    LEFT = "L"
+    TOP = "U"
+    RIGHT = "R"
+    BOTTOM = "D"
+    FRONT = "F"
+
+
+class CubeSection(enum.Enum):
+    """
+    Enumeration for the movable sections of the cube, which don't correspond to a face
+    """
+
+    MIDDLE_XZ = "M"
+    MIDDLE_XY = "E"
+    MIDDLE_YZ = "S"
 
 
 class RubiksCube:
@@ -154,6 +165,77 @@ class RubiksCube:
         if double_rot:
             self.rotate_face(face=face, clockwise=clockwise)
 
+    def rotate_middle_section(
+        self, section: CubeSection, frontwards: bool, double_rot: bool = False
+    ):
+        """
+        Method to rotate a middle section of the cube.
+
+        Parameters
+        ----------
+        section: CubeSection
+            Row or column to be rotated. The name of the section should correspond
+            to the plane in which the section is contained.
+        frontwards: bool
+            If True, and depending on the selected section, the rotation is performed
+            from Top to Front or from Front to Right. If False, the rotation is the
+            inverse as the mentioned ones.
+        double_rot: bool, default = False
+            If True, the section is rotated twice.
+        """
+        if section is CubeSection.MIDDLE_XZ:
+            if frontwards:
+                face_order = (
+                    CubeFace.TOP,
+                    CubeFace.FRONT,
+                    CubeFace.BOTTOM,
+                    CubeFace.BACK,
+                )
+            else:
+                face_order = (
+                    CubeFace.TOP,
+                    CubeFace.BACK,
+                    CubeFace.BOTTOM,
+                    CubeFace.FRONT,
+                )
+
+            self.__vertical_perpendicular_rotation(
+                front_col_idx=1, face_order=face_order
+            )
+
+        elif section is CubeSection.MIDDLE_XY:
+            if frontwards:
+                face_order = (
+                    CubeFace.FRONT,
+                    CubeFace.RIGHT,
+                    CubeFace.BACK,
+                    CubeFace.LEFT,
+                )
+            else:
+                face_order = (
+                    CubeFace.FRONT,
+                    CubeFace.LEFT,
+                    CubeFace.BACK,
+                    CubeFace.RIGHT,
+                )
+
+            self.__horizontal_row_rotation(row_idx=1, face_order=face_order)
+
+        if double_rot:
+            self.rotate_middle_section(section=section, frontwards=frontwards)
+
+        elif section is CubeSection.MIDDLE_YZ:
+            if frontwards:
+                face_order = (
+                    CubeFace.RIGHT, CubeFace.BOTTOM, CubeFace.LEFT, CubeFace.TOP
+                )
+            else:
+                face_order = (
+                    CubeFace.LEFT, CubeFace.BOTTOM, CubeFace.RIGHT, CubeFace.TOP
+                )
+
+            self.__vertical_parallel_rotation(right_col_idx=1, face_order=face_order)
+
     def __horizontal_row_rotation(self, row_idx: int, face_order: tuple):
         """
         Computes and updates the tiles' values of a 1x3x3 cube contained in the
@@ -176,9 +258,10 @@ class RubiksCube:
 
     def __vertical_perpendicular_rotation(self, front_col_idx: int, face_order: tuple):
         """
-        Computes and updates the values of the tiles at one single Y-axis parallel
-        column from the cube. The only two faces that exist purely in this axis are
-        the Right and Left faces.
+        Computes and updates the tiles' values of a 1x3x3 cube contained in the
+        plane XZ.
+        Being the rotation around the Y-axis, the only faces that are not updated
+        are the Right and Left faces.
 
         Parameters
         ----------
@@ -222,6 +305,7 @@ class RubiksCube:
             Column to rotate from the right's face perspective.
         face_order: tuple of CubeFace instances
             Sequence containing the order in which the faces are to be rotated.
+            The first face should always be the Right face.
         """
         if right_col_idx == 0:
             pos_idx = tuple(
