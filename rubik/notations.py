@@ -5,13 +5,7 @@ Rubik's cube
 import enum
 
 
-class NotationEnum(enum.Enum):
-    """Extended enumeration with __contains__ applied directly to the values"""
-    def __contains__(self, item) -> bool:
-        return item in self._value2member_map_
-
-
-class Color(NotationEnum):
+class Color(enum.Enum):
     """
     Enumeration containing the six colors of the cube.
     """
@@ -24,7 +18,7 @@ class Color(NotationEnum):
     YELLOW = "Y"
 
 
-class CubeFace(NotationEnum):
+class CubeFace(enum.Enum):
     """
     Enumeration containing the six positional faces of the cube.
     Each element has the value of its Rubik's cube face notation.
@@ -38,7 +32,7 @@ class CubeFace(NotationEnum):
     FRONT = "F"
 
 
-class CubeSection(NotationEnum):
+class CubeSection(enum.Enum):
     """
     Enumeration for the movable sections of the cube, which don't correspond to a face
     """

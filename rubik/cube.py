@@ -6,7 +6,7 @@ from typing import Literal, Sequence
 
 import numpy as np
 
-from rubik.notations import Color, CubeFace, CubeSection, MovesNotation
+from rubik.notations import Color, CubeFace, CubeSection
 
 
 class RubiksCube:
@@ -20,7 +20,64 @@ class RubiksCube:
         """
         self.faces = {F: np.full((3, 3), C.value) for F, C in zip(CubeFace, Color)}
 
-        self.__solved_state = self.faces.copy()
+        self._moves_notation = {
+            # Face rotation operations
+            "U": {"func": self.rotate_face, "args": (CubeFace.TOP, True)},
+            "U'": {"func": self.rotate_face, "args": (CubeFace.TOP, False)},
+            "U2": {"func": self.rotate_face, "args": (CubeFace.TOP, True, True)},
+            "D": {"func": self.rotate_face, "args": (CubeFace.BOTTOM, True)},
+            "D'": {"func": self.rotate_face, "args": (CubeFace.BOTTOM, False)},
+            "D2": {"func": self.rotate_face, "args": (CubeFace.BOTTOM, True, True)},
+            "R": {"func": self.rotate_face, "args": (CubeFace.RIGHT, True)},
+            "R'": {"func": self.rotate_face, "args": (CubeFace.RIGHT, False)},
+            "R2": {"func": self.rotate_face, "args": (CubeFace.RIGHT, True, True)},
+            "L": {"func": self.rotate_face, "args": (CubeFace.LEFT, True)},
+            "L'": {"func": self.rotate_face, "args": (CubeFace.LEFT, False)},
+            "L2": {"func": self.rotate_face, "args": (CubeFace.LEFT, True, True)},
+            "F": {"func": self.rotate_face, "args": (CubeFace.FRONT, True)},
+            "F'": {"func": self.rotate_face, "args": (CubeFace.FRONT, False)},
+            "F2": {"func": self.rotate_face, "args": (CubeFace.FRONT, True, True)},
+            "B": {"func": self.rotate_face, "args": (CubeFace.BACK, True)},
+            "B'": {"func": self.rotate_face, "args": (CubeFace.BACK, False)},
+            "B2": {"func": self.rotate_face, "args": (CubeFace.BACK, True, True)},
+            # Section rotation operations
+            "M": {
+                "func": self.rotate_middle_section,
+                "args": (CubeSection.MIDDLE_XZ, True),
+            },
+            "M'": {
+                "func": self.rotate_middle_section,
+                "args": (CubeSection.MIDDLE_XZ, False),
+            },
+            "M2": {
+                "func": self.rotate_middle_section,
+                "args": (CubeSection.MIDDLE_XZ, True, True),
+            },
+            "E": {
+                "func": self.rotate_middle_section,
+                "args": (CubeSection.MIDDLE_XY, True),
+            },
+            "E'": {
+                "func": self.rotate_middle_section,
+                "args": (CubeSection.MIDDLE_XY, False),
+            },
+            "E2": {
+                "func": self.rotate_middle_section,
+                "args": (CubeSection.MIDDLE_XY, True, True),
+            },
+            "S": {
+                "func": self.rotate_middle_section,
+                "args": (CubeSection.MIDDLE_YZ, True),
+            },
+            "S'": {
+                "func": self.rotate_middle_section,
+                "args": (CubeSection.MIDDLE_YZ, False),
+            },
+            "S2": {
+                "func": self.rotate_middle_section,
+                "args": (CubeSection.MIDDLE_YZ, True, True),
+            },
+        }
 
     def __str__(self):
         """String representation of the class"""
@@ -35,6 +92,61 @@ class RubiksCube:
              {self.faces[CubeFace.BOTTOM][1]}
              {self.faces[CubeFace.BOTTOM][2]}
             """
+
+    def perform_operations(
+        self,
+        operations: Sequence[
+            Literal[
+                "U",
+                "U'",
+                "U2",
+                "D",
+                "D'",
+                "D2",
+                "R",
+                "R'",
+                "R2",
+                "L",
+                "L'",
+                "L2",
+                "F",
+                "F'",
+                "F2",
+                "B",
+                "B'",
+                "B2",
+                "M",
+                "M'",
+                "M2",
+                "E",
+                "E'",
+                "E2",
+                "S",
+                "S'",
+                "S2",
+            ]
+        ],
+    ):
+        """
+        Performs a single or multiple operations, which correspond to the Rubik's
+        cube notation of moves.
+        More about the Rubik's cube notation:
+        https://ruwix.com/the-rubiks-cube/notation/
+
+        Parameters
+        ----------
+        operations: Sequence of MovesNotation
+            Operations to be performed. The supported operations are:
+            U, U', U2, D, D', D2, R, R', R2, L, L', L2, F, F', F2, B, B', B2,
+            M, M', M2, E, E', E2, S, S' and S2.
+        """
+        for operation in operations:
+            if operation not in self._moves_notation:
+                warnings.warn(f"Skipping unrecognized move {operation}.")
+                continue
+
+            move = self._moves_notation[operation]
+            move["func"](*move["args"])
 
     def rotate_face(self, face: CubeFace, clockwise: bool, double_rot: bool = False):
         """
@@ -192,11 +304,17 @@ class RubiksCube:
         elif section is CubeSection.MIDDLE_YZ:
             if frontwards:
                 face_order = (
-                    CubeFace.RIGHT, CubeFace.BOTTOM, CubeFace.LEFT, CubeFace.TOP
+                    CubeFace.RIGHT,
+                    CubeFace.BOTTOM,
+                    CubeFace.LEFT,
+                    CubeFace.TOP,
                 )
             else:
                 face_order = (
-                    CubeFace.LEFT, CubeFace.BOTTOM, CubeFace.RIGHT, CubeFace.TOP
+                    CubeFace.LEFT,
+                    CubeFace.BOTTOM,
+                    CubeFace.RIGHT,
+                    CubeFace.TOP,
                 )
 
             self.__vertical_parallel_rotation(right_col_idx=1, face_order=face_order)
