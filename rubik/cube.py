@@ -1,47 +1,12 @@
 """
 This module contains all classes to define the Rubik's cube
 """
-import enum
+import warnings
+from typing import Literal, Sequence
 
 import numpy as np
 
-
-class Color(enum.Enum):
-    """
-    Enumeration containing the six colors of the cube.
-    Each color contains the BGR encoding (OpenCV encoding) as its value.
-    """
-
-    WHITE = "W"
-    ORANGE = "O"
-    GREEN = "G"
-    RED = "R"
-    BLUE = "B"
-    YELLOW = "Y"
-
-
-class CubeFace(enum.Enum):
-    """
-    Enumeration containing the six positional faces of the cube.
-    Each element has the value of its Rubik's cube face notation.
-    """
-
-    BACK = "B"
-    LEFT = "L"
-    TOP = "U"
-    RIGHT = "R"
-    BOTTOM = "D"
-    FRONT = "F"
-
-
-class CubeSection(enum.Enum):
-    """
-    Enumeration for the movable sections of the cube, which don't correspond to a face
-    """
-
-    MIDDLE_XZ = "M"
-    MIDDLE_XY = "E"
-    MIDDLE_YZ = "S"
+from rubik.notations import Color, CubeFace, CubeSection, MovesNotation
 
 
 class RubiksCube:
