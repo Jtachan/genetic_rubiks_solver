@@ -3,6 +3,7 @@ This module contains all classes to define the Rubik's cube
 """
 from __future__ import annotations
 
+import random
 import warnings
 from typing import Literal, Sequence
 
@@ -124,6 +125,18 @@ class RubiksCube:
                 face = next(faces)
 
         return cube
+
+    def scramble(self, nof_moves: int = 25):
+        """
+        Performs random moves on the cube to scramble it.
+
+        Parameters
+        ----------
+        nof_moves: int, default = 25
+            Number of moves takes in consideration to scramble the cube.
+        """
+        operations = list(self._moves_notation.keys())
+        self.perform_operations(random.choices(operations, k=nof_moves))
 
     def perform_operations(
         self,
@@ -448,3 +461,11 @@ class RubiksCube:
     def is_solved(self) -> bool:
         """bool: Whether the cube is solved as in the original state"""
         return np.all([np.all(face == face[0, 0]) for face in self.faces.values()])
+
+    @property
+    def color_code(self) -> str:
+        """str:
+        The color position of all tiles on the cube. The face order in which they are
+        returned is Top, Left, Front, Right, Back, Bottom.
+        """
+        return "".join("".join(self.faces[f].flatten()) for f in CubeFace)
