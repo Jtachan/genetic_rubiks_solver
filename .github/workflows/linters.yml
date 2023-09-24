@@ -23,8 +23,8 @@ jobs:
           pip install -r dev_requirements.txt
       - name: Run linters
         run: |
-          isort --check enigma_cipher setup.py unittests
-          black --check enigma_cipher setup.py unittests
+          isort --check rubik setup.py unittests
+          black --check rubik setup.py unittests
           pip install .
-          flake8 --tee --format=pylint enigma_cipher unittests
-          pylint --rcfile=pylintrc enigma_cipher unittests
+          flake8 --tee --format=pylint rubik unittests
+          pylint --rcfile=pylintrc rubik unittests
