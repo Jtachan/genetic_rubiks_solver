@@ -1,6 +1,8 @@
 """
 This module contains all classes to define the Rubik's cube
 """
+from __future__ import annotations
+
 import warnings
 from typing import Literal, Sequence
 
@@ -93,6 +95,36 @@ class RubiksCube:
              {self.faces[CubeFace.BOTTOM][2]}
             """
 
+    @classmethod
+    def from_color_code(cls, cube_str: str) -> RubiksCube:
+        """
+        Initializes a cube from a string of 27 color values.
+
+        Parameters
+        ----------
+        cube_str: str
+            Values of the cube given in the next face order: Top, Left, Front, Right,
+            Back, Bottom.
+            Each value must be the initial letter of its color. For example, 'Y' for
+            'Yellow'.
+        """
+        if len(cube_str) != 54:
+            raise ValueError("Invalid string given")
+
+        cube = cls()
+        faces = iter(CubeFace)
+        face = next(faces)
+
+        for idx, color_val in enumerate(cube_str[:9].upper()):
+            if idx >= 9:
+                idx %= 9
+            coordinate = divmod(idx, 3)
+            cube[face][coordinate] = Color(color_val).value
+            if idx + 1 % 9 == 0 and face is not CubeFace.BOTTOM:
+                face = next(faces)
+
+        return cube
+
     def perform_operations(
         self,
         operations: Sequence[
@@ -147,6 +179,12 @@ class RubiksCube:
 
             move = self._moves_notation[operation]
             move["func"](*move["args"])
+
+    def __getitem__(self, face: CubeFace):
+        """Returns the specified face"""
+        if not isinstance(face, CubeFace):
+            raise ValueError(f"Unsupported instance '{type(face)}'.")
+        return self.faces[face]
 
     def rotate_face(self, face: CubeFace, clockwise: bool, double_rot: bool = False):
         """
