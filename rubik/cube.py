@@ -96,6 +96,24 @@ class RubiksCube:
              {self.faces[CubeFace.BOTTOM][2]}
             """
 
+    def __getitem__(self, face: CubeFace) -> np.ndarray:
+        """Returns the specified face"""
+        if not isinstance(face, CubeFace):
+            raise ValueError(f"Unsupported instance '{type(face)}'.")
+        return self.faces[face]
+
+    def __eq__(self, other: [RubiksCube | str]) -> bool:
+        """
+        Exact comparison of the cube. Solved instances of RubiksCube do not need to be
+        exact.
+        The string comparison in only for color-code strings of 54 values.
+        """
+        if isinstance(other, RubiksCube):
+            if self.is_solved() and other.is_solved():
+                return True
+            other = other.color_code
+        return self.color_code == other.upper()
+
     @classmethod
     def from_color_code(cls, cube_str: str) -> RubiksCube:
         """
@@ -116,12 +134,12 @@ class RubiksCube:
         faces = iter(CubeFace)
         face = next(faces)
 
-        for idx, color_val in enumerate(cube_str[:9].upper()):
+        for idx, color_val in enumerate(cube_str.upper()):
             if idx >= 9:
                 idx %= 9
             coordinate = divmod(idx, 3)
             cube[face][coordinate] = Color(color_val).value
-            if idx + 1 % 9 == 0 and face is not CubeFace.BOTTOM:
+            if (idx + 1) % 9 == 0 and face is not CubeFace.BOTTOM:
                 face = next(faces)
 
         return cube
@@ -192,12 +210,6 @@ class RubiksCube:
 
             move = self._moves_notation[operation]
             move["func"](*move["args"])
-
-    def __getitem__(self, face: CubeFace):
-        """Returns the specified face"""
-        if not isinstance(face, CubeFace):
-            raise ValueError(f"Unsupported instance '{type(face)}'.")
-        return self.faces[face]
 
     def rotate_face(self, face: CubeFace, clockwise: bool, double_rot: bool = False):
         """

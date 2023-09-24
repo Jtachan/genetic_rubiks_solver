@@ -9,14 +9,16 @@ def test_initialization():
     cube = RubiksCube()
     assert cube.is_solved(), "The cube has not been initialized as a solved cube."
 
+    cube = RubiksCube.from_color_code(
+        "bbbbbbbbbGGGGGGGGGoooooooooYYYYYYYYYrrrrrrrrrWWWWWWWWW"
+    )
+    assert cube.is_solved(), "Issue initializing the cube from a string."
+    assert cube == RubiksCube(), "Problem comparing solved cubes"
+    assert cube == "bbbbbbbbbGGGGGGGGGoooooooooYYYYYYYYYrrrrrrrrrWWWWWWWWW", "Problem comparing solved cubes"
+
     cube.scramble()
     # And odd number of random moves cannot get as result a solved cube
     assert not cube.is_solved(), "Could not scramble the cube correctly"
-
-    cube = RubiksCube.from_color_code(
-        "GGGGGGGGGoooooooooYYYYYYYYYrrrrrrrrrWWWWWWWWWbbbbbbbbb"
-    )
-    assert cube.is_solved(), "Issue initializing the cube from a string."
 
     cube = RubiksCube.from_color_code(
         "BGBGGGWRGBOYYRBGYORGYBWGRGWYGOGOBOGOYGYGYGRGWYOROBGRBG"
