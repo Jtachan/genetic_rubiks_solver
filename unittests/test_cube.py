@@ -26,6 +26,19 @@ def test_initialization():
     assert not cube.is_solved(), "Issue initializing a scrambled cube from a string."
 
 
-@pytest.mark.parametrize("face", list(CubeFace))
-def test_faces_moves(face: CubeFace):
+@pytest.mark.parametrize(
+    "face, exp_result",
+    (
+        (CubeFace.TOP, "GGGGGGGGGYYYOOOOOORRRYYYYYYWWWRRRRRROOOWWWWWWBBBBBBBBB"),
+        (CubeFace.LEFT, "WGGWGGWGGOOOOOOOOOGYYGYYGYYRRRRRRRRRWWBWWBWWBYBBYBBYBB"),
+        (CubeFace.FRONT, "GGGGGGOOOOOBOOBOOBYYYYYYYYYGRRGRRGRRWWWWWWWWWRRRBBBBBB"),
+        (CubeFace.RIGHT, "GGYGGYGGYOOOOOOOOOYYBYYBYYBRRRRRRRRRGWWGWWGWWBBWBBWBBW"),
+        (CubeFace.BACK, "RRRGGGGGGGOOGOOGOOYYYYYYYYYRRBRRBRRBWWWWWWWWWBBBBBBOOO"),
+        (CubeFace.BOTTOM, "GGGGGGGGGOOOOOOWWWYYYYYYOOORRRRRRYYYWWWWWWRRRBBBBBBBBB"),
+    )
+)
+def test_faces_moves(face: CubeFace, exp_result: str):
     """Correct rotation of all the main cube faces"""
+    cube = RubiksCube()
+    cube.rotate_face(face=face, clockwise=True)
+    assert cube == exp_result, "Failed rotation"
