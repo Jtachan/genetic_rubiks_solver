@@ -10,12 +10,12 @@ class Color(enum.Enum):
     Enumeration containing the six colors of the cube.
     """
 
-    WHITE = "W"
-    ORANGE = "O"
     GREEN = "G"
-    RED = "R"
-    BLUE = "B"
+    ORANGE = "O"
     YELLOW = "Y"
+    RED = "R"
+    WHITE = "W"
+    BLUE = "B"
 
 
 class CubeFace(enum.Enum):
@@ -24,17 +24,17 @@ class CubeFace(enum.Enum):
     Each element has the value of its Rubik's cube face notation.
     """
 
-    BACK = "B"
-    LEFT = "L"
     TOP = "U"
-    RIGHT = "R"
-    BOTTOM = "D"
+    LEFT = "L"
     FRONT = "F"
+    RIGHT = "R"
+    BACK = "B"
+    BOTTOM = "D"
 
 
 class CubeSection(enum.Enum):
     """
-    Enumeration for the movable sections of the cube, which don't correspond to a face
+    Enumeration for the movable sections of the cube, which don't correspond to a face.
     """
 
     MIDDLE_XZ = "M"
@@ -42,7 +42,7 @@ class CubeSection(enum.Enum):
     MIDDLE_YZ = "S"
 
 
-MovesNotation = {
+MovesNotation = [
     "U",
     "U'",
     "U2",
@@ -70,4 +70,4 @@ MovesNotation = {
     "S",
     "S'",
     "S2",
-}
+]
