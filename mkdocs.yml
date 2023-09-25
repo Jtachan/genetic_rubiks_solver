@@ -5,6 +5,7 @@ nav:
   - Home: 'index.md'
   - About:
       - Genetic algorithms: gen_algo.md
+      - Rubik's cube (code): rubik-cube.md
 
 theme:
   name: material
