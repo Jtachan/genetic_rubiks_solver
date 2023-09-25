@@ -1,7 +1,7 @@
 """Module to test the correct behaviour of the cube"""
 import pytest
 
-from rubik import CubeFace, RubiksCube, CubeSection
+from rubik import CubeFace, CubeSection, RubiksCube
 
 
 def test_initialization():
@@ -14,7 +14,9 @@ def test_initialization():
     )
     assert cube.is_solved(), "Issue initializing the cube from a string."
     assert cube == RubiksCube(), "Problem comparing solved cubes"
-    assert cube == "bbbbbbbbbGGGGGGGGGoooooooooYYYYYYYYYrrrrrrrrrWWWWWWWWW", "Problem comparing solved cubes"
+    assert (
+        cube == "bbbbbbbbbGGGGGGGGGoooooooooYYYYYYYYYrrrrrrrrrWWWWWWWWW"
+    ), "Problem comparing solved cubes"
 
     cube.scramble()
     # And odd number of random moves cannot get as result a solved cube
@@ -35,7 +37,7 @@ def test_initialization():
         (CubeFace.RIGHT, "GGYGGYGGYOOOOOOOOOYYBYYBYYBRRRRRRRRRGWWGWWGWWBBWBBWBBW"),
         (CubeFace.BACK, "RRRGGGGGGGOOGOOGOOYYYYYYYYYRRBRRBRRBWWWWWWWWWBBBBBBOOO"),
         (CubeFace.BOTTOM, "GGGGGGGGGOOOOOOWWWYYYYYYOOORRRRRRYYYWWWWWWRRRBBBBBBBBB"),
-    )
+    ),
 )
 def test_faces_moves(face: CubeFace, exp_result: str):
     """Correct rotation of all the main cube faces"""
@@ -51,10 +53,11 @@ def test_faces_moves(face: CubeFace, exp_result: str):
     (
         (CubeSection("M"), "GWGGWGGWGOOOOOOOOOYGYYGYYGYRRRRRRRRRWBWWBWWBWBYBBYBBYB"),
         (CubeSection("E"), "GGGGGGGGGOOOWWWOOOYYYOOOYYYRRRYYYRRRWWWRRRWWWBBBBBBBBB"),
-        (CubeSection("S"), "GGGOOOGGGOBOOBOOBOYYYYYYYYYRGRRGRRGRWWWWWWWWWBBBRRRBBB")
-    )
+        (CubeSection("S"), "GGGOOOGGGOBOOBOOBOYYYYYYYYYRGRRGRRGRWWWWWWWWWBBBRRRBBB"),
+    ),
 )
 def test_section_move(section: CubeSection, exp_result: str):
+    """Correct rotation of all middle sections"""
     cube = RubiksCube()
     cube.rotate_middle_section(section, frontwards=True)
     assert cube == exp_result, "Failed frontwards rotation"
