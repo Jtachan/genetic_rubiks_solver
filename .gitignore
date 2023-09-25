@@ -157,3 +157,4 @@ cython_debug/
 
 # Dev files
 check_pkg.bat
+dev_requirements.txt
