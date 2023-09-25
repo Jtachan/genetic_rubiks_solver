@@ -41,4 +41,10 @@ def test_faces_moves(face: CubeFace, exp_result: str):
     """Correct rotation of all the main cube faces"""
     cube = RubiksCube()
     cube.rotate_face(face=face, clockwise=True)
-    assert cube == exp_result, "Failed rotation"
+    assert cube == exp_result, "Failed clockwise rotation"
+    cube.rotate_face(face=face, clockwise=False)
+    assert cube.is_solved(), "Failed counter-clockwise rotation"
+
+
+def test_section_move(section, exp_result):
+    ...

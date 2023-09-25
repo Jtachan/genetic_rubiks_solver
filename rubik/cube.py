@@ -426,7 +426,7 @@ class RubiksCube:
             back_col_idx if face is CubeFace.BACK else front_col_idx
             for face in face_order
         )
-        backup_tiles = self.faces[face_order[0]][col_idx[0]].copy()
+        backup_tiles = self.faces[face_order[0]][:, col_idx[0]].copy()
         self.faces[face_order[0]][:, col_idx[0]] = self.faces[face_order[3]][
             :, col_idx[3]
         ]
