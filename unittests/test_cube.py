@@ -1,7 +1,7 @@
 """Module to test the correct behaviour of the cube"""
 import pytest
 
-from rubik import CubeFace, RubiksCube
+from rubik import CubeFace, RubiksCube, CubeSection
 
 
 def test_initialization():
@@ -46,5 +46,17 @@ def test_faces_moves(face: CubeFace, exp_result: str):
     assert cube.is_solved(), "Failed counter-clockwise rotation"
 
 
-def test_section_move(section, exp_result):
-    ...
+@pytest.mark.parametrize(
+    "section, exp_result",
+    (
+        (CubeSection("M"), "GWGGWGGWGOOOOOOOOOYGYYGYYGYRRRRRRRRRWBWWBWWBWBYBBYBBYB"),
+        (CubeSection("E"), "GGGGGGGGGOOOWWWOOOYYYOOOYYYRRRYYYRRRWWWRRRWWWBBBBBBBBB"),
+        (CubeSection("S"), "GGGOOOGGGOBOOBOOBOYYYYYYYYYRGRRGRRGRWWWWWWWWWBBBRRRBBB")
+    )
+)
+def test_section_move(section: CubeSection, exp_result: str):
+    cube = RubiksCube()
+    cube.rotate_middle_section(section, frontwards=True)
+    assert cube == exp_result, "Failed frontwards rotation"
+    cube.rotate_middle_section(section, frontwards=False)
+    assert cube.is_solved(), "Failed backwards rotation"
