@@ -5,11 +5,11 @@ from __future__ import annotations
 
 import random
 import warnings
-from typing import Literal, Sequence
+from typing import Sequence
 
 import numpy as np
 
-from rubik.notations import Color, CubeFace, CubeSection
+from rubik.notations import Color, CubeFace, CubeSection, MovesNotation
 
 
 class RubiksCube:
@@ -156,40 +156,7 @@ class RubiksCube:
         operations = list(self._moves_notation.keys())
         self.perform_operations(random.choices(operations, k=nof_moves))
 
-    def perform_operations(
-        self,
-        operations: Sequence[
-            Literal[
-                "U",
-                "U'",
-                "U2",
-                "D",
-                "D'",
-                "D2",
-                "R",
-                "R'",
-                "R2",
-                "L",
-                "L'",
-                "L2",
-                "F",
-                "F'",
-                "F2",
-                "B",
-                "B'",
-                "B2",
-                "M",
-                "M'",
-                "M2",
-                "E",
-                "E'",
-                "E2",
-                "S",
-                "S'",
-                "S2",
-            ]
-        ],
-    ):
+    def perform_operations(self, operations: Sequence[MovesNotation]):
         """
         Performs a single or multiple operations, which correspond to the Rubik's
         cube notation of moves.
@@ -204,6 +171,8 @@ class RubiksCube:
             M, M', M2, E, E', E2, S, S' and S2.
         """
         for operation in operations:
+            if operation is None:
+                continue
             if operation not in self._moves_notation:
                 warnings.warn(f"Skipping unrecognized move {operation}.")
                 continue

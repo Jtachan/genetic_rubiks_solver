@@ -70,4 +70,5 @@ MovesNotation = [
     "S",
     "S'",
     "S2",
+    None,  # Perform no operation (no move)
 ]
