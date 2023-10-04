@@ -2,15 +2,13 @@
 This module contains a class to perform the genetic algorithm
 """
 import random
-
-from typing import Sequence, Optional
-
 from dataclasses import dataclass
+from typing import Optional, Sequence
 
 import numpy as np
 
 from rubik.cube import RubiksCube
-from rubik.notations import MovesNotation, CubeFace
+from rubik.notations import CubeFace, MovesNotation
 
 
 @dataclass
@@ -45,12 +43,12 @@ class GeneticSolver:
         nof_correct_tiles = np.sum(
             [np.unique(cube[face], return_counts=True)[1].max() for face in CubeFace]
         )
-        return int(nof_correct_tiles ** 2)
+        return int(nof_correct_tiles**2)
 
     @staticmethod
     def generate_random_candidate(nof_moves: int = 50) -> Sequence[MovesNotation]:
         return random.choices(MovesNotation, k=nof_moves)
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     GeneticSolver()
